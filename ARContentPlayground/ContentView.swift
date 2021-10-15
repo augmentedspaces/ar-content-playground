@@ -32,6 +32,13 @@ struct ContentView : View {
     @StateObject var viewModel: ViewModel
     
     var body: some View {
+        #if !targetEnvironment(simulator)
+        // App should only be run on simulator.
+        Text("Run on Simulator")
+            .font(.title)
+
+        #else
+
         ZStack {
             // AR View.
             ARViewContainer(viewModel: viewModel)
@@ -73,6 +80,8 @@ struct ContentView : View {
         }
         .edgesIgnoringSafeArea(.all)
         .statusBar(hidden: true)
+        
+        #endif
     }
     
     // Helper methods for rendering icon.
@@ -215,7 +224,8 @@ class SimpleARView: ARView {
         exampleBox.position.y = 0.05
         simulatedAnchor.addChild(exampleBox)
 
-        
+ 
+        /*
         // Play audio file.
         do {
             let resource = try AudioFileResource.load(named: "car-beep.mp3", in: nil,
@@ -227,7 +237,8 @@ class SimpleARView: ARView {
         } catch {
             print("Error loading audio file")
         }
-
+         */
+         
 
         /*
         // Add spiral staircase.
