@@ -167,6 +167,7 @@ class SimpleARView: ARView {
     func processUISignal(_ signal: ViewModel.UISignal) {
         switch signal {
         case .reset:
+            print("👇 Did press reset button")
             simulatedAnchor.orientation = simd_quatf(angle: 0, axis: [0,1,0])
             viewModel.counter = 0
             
