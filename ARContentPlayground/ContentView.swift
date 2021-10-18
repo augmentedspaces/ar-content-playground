@@ -59,7 +59,7 @@ struct ContentView : View {
             // UI on the top row.
             HStack() {
                 Text("\(viewModel.titleText) : \(viewModel.counter)")
-                    .font(.title2)
+                    .font(.custom("Inconsolata Black", size: 22))
                     .foregroundColor(.white)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -123,7 +123,9 @@ class SimpleARView: ARView {
     var exampleBox: Entity!
     
     var exampleUSDZModel: Entity!
-    
+
+    var exampleTextEntity: Entity!
+
     var audioController: AudioPlaybackController!
     
 
@@ -216,15 +218,30 @@ class SimpleARView: ARView {
         let checkerBoardPlane = ModelEntity(mesh: .generatePlane(width: 0.5, depth: 0.5), materials: [checkerBoardMaterial])
         simulatedAnchor.addChild(checkerBoardPlane)
     
-
+        /*
         // Add example box.
         let boxMesh       = MeshResource.generateBox(size: 0.05, cornerRadius: 0.002)
         let cyanMaterial  = SimpleMaterial(color: .cyan, isMetallic: false)
         exampleBox = ModelEntity(mesh: boxMesh, materials: [cyanMaterial])
         exampleBox.position.y = 0.05
         simulatedAnchor.addChild(exampleBox)
+         */
+            
 
- 
+        // Custom font.
+        let meshFont = MeshResource.Font(name: "Inconsolata Black", size: 0.08)!
+
+        let textMesh = MeshResource.generateText("Hello World",
+                                                 extrusionDepth: 0.05,
+                                                 font: meshFont)
+
+        let redMaterial  = SimpleMaterial(color: .red, isMetallic: false)
+        exampleTextEntity = ModelEntity(mesh: textMesh, materials: [redMaterial])
+        exampleTextEntity.position.y = 0.05
+        simulatedAnchor.addChild(exampleTextEntity)
+
+
+
         /*
         // Play audio file.
         do {
@@ -275,9 +292,9 @@ class SimpleARView: ARView {
 
     // Render loop.
     func renderLoop() {
-        // Check box is not nil.
-        if let box = exampleBox {
-            box.orientation *= simd_quatf(angle: 0.01, axis: [1,0,0])
+        // Check text entity is not nil.
+        if let textEntity = exampleTextEntity {
+            textEntity.orientation *= simd_quatf(angle: 0.01, axis: [0,1,0])
         }
     }
 }

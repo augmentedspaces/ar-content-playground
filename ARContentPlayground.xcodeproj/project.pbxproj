@@ -14,6 +14,7 @@
 		6A6D50512716985B0014C75E /* checker-board.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A6D50502716985B0014C75E /* checker-board.png */; };
 		6A6D50542716A2A10014C75E /* toy_biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 6A6D50532716A2A00014C75E /* toy_biplane.usdz */; };
 		6ABC3D0E2717125E00185A68 /* car-beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6ABC3D0D2717125E00185A68 /* car-beep.mp3 */; };
+		6ACF4193271DAB9200DA396C /* Inconsolata-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6ACF418B271DAB9200DA396C /* Inconsolata-Black.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		6A6D50532716A2A00014C75E /* toy_biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_biplane.usdz; sourceTree = "<group>"; };
 		6A6D50552716A2C60014C75E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		6ABC3D0D2717125E00185A68 /* car-beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "car-beep.mp3"; sourceTree = "<group>"; };
+		6ACF418B271DAB9200DA396C /* Inconsolata-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inconsolata-Black.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				6A6D504F2716985B0014C75E /* Textures */,
 				6A6D50522716A2A00014C75E /* Models */,
 				6ABC3D0C2717124300185A68 /* Media */,
+				6ACF417F271DAA4800DA396C /* Fonts */,
 				6A6D5047271696630014C75E /* Preview Content */,
 			);
 			path = ARContentPlayground;
@@ -100,6 +103,14 @@
 				6ABC3D0D2717125E00185A68 /* car-beep.mp3 */,
 			);
 			path = Media;
+			sourceTree = "<group>";
+		};
+		6ACF417F271DAA4800DA396C /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				6ACF418B271DAB9200DA396C /* Inconsolata-Black.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +176,7 @@
 				6A6D5046271696630014C75E /* Assets.xcassets in Resources */,
 				6A6D50542716A2A10014C75E /* toy_biplane.usdz in Resources */,
 				6A6D50512716985B0014C75E /* checker-board.png in Resources */,
+				6ACF4193271DAB9200DA396C /* Inconsolata-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,7 +319,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ARContentPlayground/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HY8AUX8L27;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ARContentPlayground/Info.plist;
@@ -339,7 +351,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ARContentPlayground/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = HY8AUX8L27;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ARContentPlayground/Info.plist;
