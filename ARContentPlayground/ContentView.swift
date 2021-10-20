@@ -10,6 +10,13 @@ import SwiftUI
 import ARKit
 import RealityKit
 import Combine
+import Firebase
+
+
+
+struct MyData: Codable {
+    let timeStamp: String
+}
 
 
 // MARK: - View model for handling communication between the UI and ARView.
@@ -150,6 +157,24 @@ class SimpleARView: ARView {
         setupScene()
         
         setupEntities()
+    
+    
+        FirebaseApp.configure()
+        
+        let rootRef = Database.database(url: "https://ar-journal-default-rtdb.firebaseio.com/").reference()
+        rootRef.observe(.childAdded, with: { snapshot in
+            
+            let dict = snapshot.value as? [String : AnyObject] ?? [:]
+            let jsonData = try! JSONSerialization.data(withJSONObject: dict, options: [])
+            
+            let decoder = JSONDecoder()
+            guard let myData = try? decoder.decode(MyData.self, from: jsonData)  else { return }
+
+            let textEntity = self.createTextEntity(text: myData.timeStamp)
+            textEntity.position.x = -0.25
+            textEntity.position.y = Float.random(in: 0.025...0.4)
+            self.simulatedAnchor.addChild(textEntity)
+        })
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -227,7 +252,7 @@ class SimpleARView: ARView {
         simulatedAnchor.addChild(exampleBox)
          */
             
-
+/*
         // Custom font.
         let meshFont = MeshResource.Font(name: "Inconsolata Black", size: 0.08)!
 
@@ -239,7 +264,7 @@ class SimpleARView: ARView {
         exampleTextEntity = ModelEntity(mesh: textMesh, materials: [redMaterial])
         exampleTextEntity.position.y = 0.05
         simulatedAnchor.addChild(exampleTextEntity)
-
+        */
 
 
         /*
@@ -292,9 +317,20 @@ class SimpleARView: ARView {
 
     // Render loop.
     func renderLoop() {
-        // Check text entity is not nil.
-        if let textEntity = exampleTextEntity {
-            textEntity.orientation *= simd_quatf(angle: 0.01, axis: [0,1,0])
-        }
+//        // Check text entity is not nil.
+//        if let textEntity = exampleTextEntity {
+//            textEntity.orientation *= simd_quatf(angle: 0.01, axis: [0,1,0])
+//        }
+    }
+    
+    func createTextEntity(text: String) -> Entity {
+        let meshFont = MeshResource.Font(name: "Inconsolata Black", size: 0.04)!
+
+        let textMesh = MeshResource.generateText(text,
+                                                 extrusionDepth: 0.04,
+                                                 font: meshFont)
+
+        let redMaterial  = SimpleMaterial(color: .green, isMetallic: false)
+        return ModelEntity(mesh: textMesh, materials: [redMaterial])
     }
 }

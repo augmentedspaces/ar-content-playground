@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A4FBF0027205A7F0009A21F /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 6A4FBEFF27205A7F0009A21F /* FirebaseDatabase */; };
+		6A4FBF0227205AC80009A21F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A4FBF0127205AC80009A21F /* GoogleService-Info.plist */; };
 		6A6D5040271696620014C75E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D503F271696620014C75E /* AppDelegate.swift */; };
 		6A6D5042271696620014C75E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D5041271696620014C75E /* ContentView.swift */; };
 		6A6D5046271696630014C75E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A6D5045271696630014C75E /* Assets.xcassets */; };
@@ -18,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A4FBF0127205AC80009A21F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6A6D503C271696620014C75E /* ARContentPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARContentPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A6D503F271696620014C75E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A6D5041271696620014C75E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -35,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A4FBF0027205A7F0009A21F /* FirebaseDatabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +64,7 @@
 		6A6D503E271696620014C75E /* ARContentPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				6A4FBF0127205AC80009A21F /* GoogleService-Info.plist */,
 				6A6D503F271696620014C75E /* AppDelegate.swift */,
 				6A6D5041271696620014C75E /* ContentView.swift */,
 				6A6D5045271696630014C75E /* Assets.xcassets */,
@@ -129,6 +134,9 @@
 			dependencies = (
 			);
 			name = ARContentPlayground;
+			packageProductDependencies = (
+				6A4FBEFF27205A7F0009A21F /* FirebaseDatabase */,
+			);
 			productName = ARPlayground;
 			productReference = 6A6D503C271696620014C75E /* ARContentPlayground.app */;
 			productType = "com.apple.product-type.application";
@@ -157,6 +165,9 @@
 				Base,
 			);
 			mainGroup = 6A6D5033271696620014C75E;
+			packageReferences = (
+				6A4FBEFE27205A7F0009A21F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 6A6D503D271696620014C75E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -177,6 +188,7 @@
 				6A6D50542716A2A10014C75E /* toy_biplane.usdz in Resources */,
 				6A6D50512716985B0014C75E /* checker-board.png in Resources */,
 				6ACF4193271DAB9200DA396C /* Inconsolata-Black.ttf in Resources */,
+				6A4FBF0227205AC80009A21F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,7 +347,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mysite.ARContentPlayground;
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.nyu.as.ar-journal";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -367,7 +379,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mysite.ARContentPlayground;
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.nyu.as.ar-journal";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -397,6 +409,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6A4FBEFE27205A7F0009A21F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6A4FBEFF27205A7F0009A21F /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A4FBEFE27205A7F0009A21F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6A6D5034271696620014C75E /* Project object */;
 }
