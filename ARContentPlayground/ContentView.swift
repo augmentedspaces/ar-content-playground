@@ -13,7 +13,7 @@ import Combine
 import Firebase
 
 
-
+// Data to store in the Firebase.
 struct MyData: Codable {
     let timeStamp: String
 }
@@ -159,17 +159,30 @@ class SimpleARView: ARView {
         setupEntities()
     
     
+        // Firebase setup.
         FirebaseApp.configure()
+
+        // TODO: Added url.
+        // NOTE: Url is visible in Firebase console for project.
+        let url = "https://"
         
-        let rootRef = Database.database(url: "https://ar-journal-default-rtdb.firebaseio.com/").reference()
+        let rootRef = Database.database(url: url).reference()
+
+        // Observe whenever a record is added.
         rootRef.observe(.childAdded, with: { snapshot in
-            
+
+            // Convert data into JSON.
             let dict = snapshot.value as? [String : AnyObject] ?? [:]
             let jsonData = try! JSONSerialization.data(withJSONObject: dict, options: [])
             
+            // Map JSON to your data structure.
             let decoder = JSONDecoder()
-            guard let myData = try? decoder.decode(MyData.self, from: jsonData)  else { return }
+            guard let myData = try? decoder.decode(MyData.self, from: jsonData)  else {
+                print("❌ Error mapping data.")
+                return
+            }
 
+            // Grab time stamp data and add text entity to random position.
             let textEntity = self.createTextEntity(text: myData.timeStamp)
             textEntity.position.x = -0.25
             textEntity.position.y = Float.random(in: 0.025...0.4)
