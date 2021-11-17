@@ -11,42 +11,61 @@ using namespace metal;
 
 
 [[visible]]
-void myGeometryModifier(realitykit::geometry_parameters params)
-{
-    float3 zOffset = float3(0.0, 0.0, params.uniforms().time() / 50.0);
-    params.geometry().set_world_position_offset(zOffset);
-}
-
-
-[[visible]]
-void mySurfaceShader(realitykit::surface_parameters params)
+void passthroughSurfaceShader(realitykit::surface_parameters params)
 {
     constexpr sampler samplerBilinear(coord::normalized,
                                       address::repeat,
                                       filter::linear,
                                       mip_filter::nearest);
-    
-    // Retrieve the base color tint from the entity's material.
-    half3 baseColorTint = (half3)params.material_constants().base_color_tint();
-    
-    // Retrieve the entity's texture coordinates.
-    float2 uv = params.geometry().uv0();
 
-    // Flip the texture coordinates y-axis. This is only needed for entities
-    // loaded from USDZ or .reality files.
-    uv.y = 1.0 - uv.y;
-    
-    // Sample a value from the material's base color texture based on the
-    // flipped UV coordinates.
     auto tex = params.textures();
-    half3 color = (half3)tex.base_color().sample(samplerBilinear, uv).rgb;
-    
-    // Multiply the tint by the sampled value from the texture, and
-    // assign the result to the shader's base color property.
-    color *= baseColorTint;
-    params.surface().set_base_color(color);
+    auto surface = params.surface();
+    float2 uv = params.geometry().uv0();
+    // USD textures require uvs to be flipped.
+    uv.y = 1.0 - uv.y;
+
+    half4 colorSample = tex.base_color().sample(samplerBilinear, uv);
+    half4 emissiveSample = tex.emissive_color().sample(samplerBilinear, uv);
+
+    // Color
+    surface.set_base_color(colorSample.rgb * half3(params.material_constants().base_color_tint()));
+    surface.set_emissive_color(max(emissiveSample.rgb, half3(params.material_constants().emissive_color())));
+
+    // Opacity
+    surface.set_opacity(tex.opacity().sample(samplerBilinear, uv).r
+                        * params.material_constants().opacity_scale()
+                        * colorSample.a);
+
+    // Normal
+    half3 normal = realitykit::unpack_normal(tex.normal().sample(samplerBilinear, uv).rgb);
+    surface.set_normal(float3(normal));
+
+    // Roughness and Metallic
+    surface.set_roughness(tex.roughness().sample(samplerBilinear, uv).r
+                          * params.material_constants().roughness_scale());
+    surface.set_metallic(tex.metallic().sample(samplerBilinear, uv).r
+                         * params.material_constants().metallic_scale());
+
+    // Ambient and Specular
+    surface.set_ambient_occlusion(tex.ambient_occlusion().sample(samplerBilinear, uv).r);
+    surface.set_specular(tex.specular().sample(samplerBilinear, uv).r
+                         * params.material_constants().specular_scale());
 }
 
+
+[[visible]]
+void pulsingSurfaceShader(realitykit::surface_parameters params)
+{
+    float intensity = sin(params.uniforms().time());
+    params.surface().set_base_color(half3(intensity));
+}
+
+
+[[visible]]
+void myEmptyShader(realitykit::surface_parameters params)
+{
+
+}
 
 
 float3 noise3D(float3 worldPos, float time) {
@@ -57,7 +76,7 @@ float3 noise3D(float3 worldPos, float time) {
 }
 
 [[visible]]
-void seaweedGeometry(realitykit::geometry_parameters params)
+void wrapGeometry(realitykit::geometry_parameters params)
 {
     float3 worldPos = params.geometry().world_position();
 

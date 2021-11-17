@@ -84,18 +84,15 @@ class SimpleARView: ARView {
     // Place holder anchor.
     var simulatedAnchor: Entity!
     
-    var exampleBox: Entity!
     var exampleUSDZModel: ModelEntity!
     
-
     // Load a geometry modifier function named.
-    let geometryModifier = CustomMaterial.GeometryModifier(named: "seaweedGeometry",
+    let geometryModifier = CustomMaterial.GeometryModifier(named: "myEmptyShader",
                                                            in: library)
 
     // Load a surface shader function.
-    let surfaceShader = CustomMaterial.SurfaceShader(named: "mySurfaceShader",
+    let surfaceShader = CustomMaterial.SurfaceShader(named: "passthroughSurfaceShader",
                                                      in: library)
-
 
     init(frame: CGRect, viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -129,12 +126,7 @@ class SimpleARView: ARView {
 
     func setupScene() {
         arView.renderOptions = [.disableDepthOfField, .disableMotionBlur]
-        
-        // Called every frame.
-        scene.subscribe(to: SceneEvents.Update.self) { event in
-            self.renderLoop()
-        }.store(in: &subscriptions)
-        
+
         // Process UI signals.
         viewModel.uiSignal.sink { [weak self] in
             self?.processUISignal($0)
@@ -156,13 +148,11 @@ class SimpleARView: ARView {
         originAnchor = AnchorEntity(world: .zero)
         arView.scene.addAnchor(originAnchor)
 
-
         // Offset set plane origin in front and below simulator camera.
         simulatedAnchor = Entity()
         simulatedAnchor.position = [0, -0.125, 1.5]
         originAnchor.addChild(simulatedAnchor)
         
-
         // Add directional light.
         let directionalLight = DirectionalLight()
         directionalLight.light.intensity = 750
@@ -176,51 +166,15 @@ class SimpleARView: ARView {
         checkerBoardMaterial.baseColor.texture = .init(try! .load(named: "checker-board.png"))
         let checkerBoardPlane = ModelEntity(mesh: .generatePlane(width: 0.5, depth: 0.5), materials: [checkerBoardMaterial])
         simulatedAnchor.addChild(checkerBoardPlane)
-    
-
-        // Add example box.
-        let boxMesh       = MeshResource.generateBox(size: 0.05, cornerRadius: 0.002)
-        // let cyanMaterial  = SimpleMaterial(color: .cyan, isMetallic: false)
-
-        let customMaterial = try! CustomMaterial(from: checkerBoardMaterial, surfaceShader: surfaceShader, geometryModifier: geometryModifier)
-
-        exampleBox = ModelEntity(mesh: boxMesh, materials: [customMaterial])
-        exampleBox.position.y = 0.05
- //       simulatedAnchor.addChild(exampleBox)
-
+         
         // Add example usdz model.
         exampleUSDZModel = try! Entity.loadModel(named: "box-a")
         exampleUSDZModel.position.y = 0.05
-        
-        exampleUSDZModel.model?.materials = [customMaterial]
-        
-//        exampleUSDZModel.m
-
-
-//        // Make sure the entity has a ModelComponent.
-//        guard var modelComponent = robot.components[ModelComponent.self] as? ModelComponent else {
-//            return
-//        }
-//
-//        // Loop through the entity's materials and replace the existing material with
-//        // one based on the original material.
-//        guard let customMaterials = try? modelComponent.materials.map({ material -> CustomMaterial in
-//            let customMaterial = try CustomMaterial(from: material, surfaceShader: surfaceShader)
-//            return customMaterial
-//        }) else { return}
-//        modelComponent.materials = customMaterials
-//        robot.components[ModelComponent.self] = modelComponent
-//
-        
         simulatedAnchor.addChild(exampleUSDZModel!)
-    }
 
-
-    // Render loop.
-    func renderLoop() {
-//        // Check box is not nil.
-//        if let box = exampleBox {
-//            box.orientation *= simd_quatf(angle: 0.01, axis: [1,0,0])
-//        }
+        let customMaterial = try! CustomMaterial(from: checkerBoardMaterial,
+                                                 surfaceShader: surfaceShader,
+                                                 geometryModifier: geometryModifier)
+        exampleUSDZModel.model?.materials = [customMaterial]
     }
 }
