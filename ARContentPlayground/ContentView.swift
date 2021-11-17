@@ -11,18 +11,16 @@ import ARKit
 import RealityKit
 import Combine
 
+// Metal library.
+let library = MTLCreateSystemDefaultDevice()!.makeDefaultLibrary()!
+
 
 // MARK: - View model for handling communication between the UI and ARView.
 class ViewModel: ObservableObject {
-    @Published var titleText = "AR Playground"
-
-    @Published var counter: Int = 0
-
     let uiSignal = PassthroughSubject<UISignal, Never>()
     
     enum UISignal {
         case reset
-        case exampleButtonPress
     }
 }
 
@@ -55,44 +53,11 @@ struct ContentView : View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding()
-
-            // UI on the top row.
-            HStack() {
-                Text("\(viewModel.titleText) : \(viewModel.counter)")
-                    .font(.title2)
-                    .foregroundColor(.white)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.top, 60)
-
-            // Controls on the bottom.
-            HStack() {
-                // Example button.
-                Button {
-                    viewModel.uiSignal.send(.exampleButtonPress)
-                } label: {
-                    buttonIcon("chevron.right.square", color: .green)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-            .padding()
-            .padding(.bottom, 10)
         }
         .edgesIgnoringSafeArea(.all)
         .statusBar(hidden: true)
         
         #endif
-    }
-    
-    // Helper methods for rendering icon.
-    func buttonIcon(_ systemName: String, color: Color) -> some View {
-        Image(systemName: systemName)
-            .resizable()
-            .padding(10)
-            .frame(width: 44, height: 44)
-            .foregroundColor(.white)
-            .background(color)
-            .cornerRadius(5)
     }
 }
 
@@ -119,13 +84,18 @@ class SimpleARView: ARView {
     // Place holder anchor.
     var simulatedAnchor: Entity!
     
-
     var exampleBox: Entity!
+    var exampleUSDZModel: ModelEntity!
     
-    var exampleUSDZModel: Entity!
-    
-    var audioController: AudioPlaybackController!
-    
+
+    // Load a geometry modifier function named.
+    let geometryModifier = CustomMaterial.GeometryModifier(named: "seaweedGeometry",
+                                                           in: library)
+
+    // Load a surface shader function.
+    let surfaceShader = CustomMaterial.SurfaceShader(named: "mySurfaceShader",
+                                                     in: library)
+
 
     init(frame: CGRect, viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -149,7 +119,7 @@ class SimpleARView: ARView {
         
         setupEntities()
     }
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
 
@@ -170,7 +140,6 @@ class SimpleARView: ARView {
             self?.processUISignal($0)
         }.store(in: &subscriptions)
     }
-    
 
     // Process UI signals.
     func processUISignal(_ signal: ViewModel.UISignal) {
@@ -178,16 +147,8 @@ class SimpleARView: ARView {
         case .reset:
             print("👇 Did press reset button")
             simulatedAnchor.orientation = simd_quatf(angle: 0, axis: [0,1,0])
-            viewModel.counter = 0
-            
-        case .exampleButtonPress:
-            print("👇 Did press example button")
-            viewModel.counter += 1
-        
-            // audioController.stop()
         }
     }
-
 
     // Setup method.
     func setupEntities() {
@@ -198,7 +159,7 @@ class SimpleARView: ARView {
 
         // Offset set plane origin in front and below simulator camera.
         simulatedAnchor = Entity()
-        simulatedAnchor.position = [0, -0.125, 1.3]
+        simulatedAnchor.position = [0, -0.125, 1.5]
         originAnchor.addChild(simulatedAnchor)
         
 
@@ -219,65 +180,47 @@ class SimpleARView: ARView {
 
         // Add example box.
         let boxMesh       = MeshResource.generateBox(size: 0.05, cornerRadius: 0.002)
-        let cyanMaterial  = SimpleMaterial(color: .cyan, isMetallic: false)
-        exampleBox = ModelEntity(mesh: boxMesh, materials: [cyanMaterial])
+        // let cyanMaterial  = SimpleMaterial(color: .cyan, isMetallic: false)
+
+        let customMaterial = try! CustomMaterial(from: checkerBoardMaterial, surfaceShader: surfaceShader, geometryModifier: geometryModifier)
+
+        exampleBox = ModelEntity(mesh: boxMesh, materials: [customMaterial])
         exampleBox.position.y = 0.05
-        simulatedAnchor.addChild(exampleBox)
+ //       simulatedAnchor.addChild(exampleBox)
 
- 
-        /*
-        // Play audio file.
-        do {
-            let resource = try AudioFileResource.load(named: "car-beep.mp3", in: nil,
-                                                      inputMode: .spatial, loadingStrategy: .preload,
-                                                      shouldLoop: false)
-
-            audioController = exampleBox.prepareAudio(resource)
-            audioController.play()
-        } catch {
-            print("Error loading audio file")
-        }
-         */
-         
-
-        /*
-        // Add spiral staircase.
-        var lastBoxEntity = exampleBox
-        for _ in 0..<10 {
-            // Create and position new entity.
-            let newEntity = exampleBox.clone(recursive: false)
-            newEntity.position.x = 0.03
-            newEntity.position.y = 0.03
-
-            // Rotate on y-axis by 45 degrees.
-            newEntity.orientation = simd_quatf(angle: .pi / 4, axis: [0, 1, 0])
-
-            // Add to last entity in tree.
-            lastBoxEntity?.addChild(newEntity)
-            
-            // Set last entity used.
-            lastBoxEntity = newEntity
-        }
-         */
-
-
-        /*
         // Add example usdz model.
-        exampleUSDZModel = try! Entity.load(named: "toy_biplane")
+        exampleUSDZModel = try! Entity.loadModel(named: "box-a")
+        exampleUSDZModel.position.y = 0.05
+        
+        exampleUSDZModel.model?.materials = [customMaterial]
+        
+//        exampleUSDZModel.m
+
+
+//        // Make sure the entity has a ModelComponent.
+//        guard var modelComponent = robot.components[ModelComponent.self] as? ModelComponent else {
+//            return
+//        }
+//
+//        // Loop through the entity's materials and replace the existing material with
+//        // one based on the original material.
+//        guard let customMaterials = try? modelComponent.materials.map({ material -> CustomMaterial in
+//            let customMaterial = try CustomMaterial(from: material, surfaceShader: surfaceShader)
+//            return customMaterial
+//        }) else { return}
+//        modelComponent.materials = customMaterials
+//        robot.components[ModelComponent.self] = modelComponent
+//
+        
         simulatedAnchor.addChild(exampleUSDZModel!)
-    
-        for animation in exampleUSDZModel.availableAnimations {
-            exampleUSDZModel.playAnimation(animation.repeat())
-        }
-         */
     }
 
 
     // Render loop.
     func renderLoop() {
-        // Check box is not nil.
-        if let box = exampleBox {
-            box.orientation *= simd_quatf(angle: 0.01, axis: [1,0,0])
-        }
+//        // Check box is not nil.
+//        if let box = exampleBox {
+//            box.orientation *= simd_quatf(angle: 0.01, axis: [1,0,0])
+//        }
     }
 }

@@ -7,16 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A5CD9C2274550B4006FAC5F /* box-b.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 6A5CD9C1274550B4006FAC5F /* box-b.usdz */; };
+		6A5CD9C427455212006FAC5F /* box-a.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 6A5CD9C327455212006FAC5F /* box-a.usdz */; };
 		6A6D5040271696620014C75E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D503F271696620014C75E /* AppDelegate.swift */; };
 		6A6D5042271696620014C75E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D5041271696620014C75E /* ContentView.swift */; };
 		6A6D5046271696630014C75E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A6D5045271696630014C75E /* Assets.xcassets */; };
 		6A6D5049271696630014C75E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A6D5048271696630014C75E /* Preview Assets.xcassets */; };
 		6A6D50512716985B0014C75E /* checker-board.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A6D50502716985B0014C75E /* checker-board.png */; };
 		6A6D50542716A2A10014C75E /* toy_biplane.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 6A6D50532716A2A00014C75E /* toy_biplane.usdz */; };
+		6AA66C35274540E90088A0EB /* shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 6AA66C34274540E90088A0EB /* shaders.metal */; };
 		6ABC3D0E2717125E00185A68 /* car-beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6ABC3D0D2717125E00185A68 /* car-beep.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A5CD9C1274550B4006FAC5F /* box-b.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "box-b.usdz"; sourceTree = "<group>"; };
+		6A5CD9C327455212006FAC5F /* box-a.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "box-a.usdz"; sourceTree = "<group>"; };
 		6A6D503C271696620014C75E /* ARContentPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARContentPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A6D503F271696620014C75E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A6D5041271696620014C75E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -25,6 +30,7 @@
 		6A6D50502716985B0014C75E /* checker-board.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checker-board.png"; sourceTree = "<group>"; };
 		6A6D50532716A2A00014C75E /* toy_biplane.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_biplane.usdz; sourceTree = "<group>"; };
 		6A6D50552716A2C60014C75E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		6AA66C34274540E90088A0EB /* shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shaders.metal; sourceTree = "<group>"; };
 		6ABC3D0D2717125E00185A68 /* car-beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "car-beep.mp3"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,6 +66,7 @@
 			children = (
 				6A6D503F271696620014C75E /* AppDelegate.swift */,
 				6A6D5041271696620014C75E /* ContentView.swift */,
+				6AA66C34274540E90088A0EB /* shaders.metal */,
 				6A6D5045271696630014C75E /* Assets.xcassets */,
 				6A6D50552716A2C60014C75E /* Info.plist */,
 				6A6D504F2716985B0014C75E /* Textures */,
@@ -90,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				6A6D50532716A2A00014C75E /* toy_biplane.usdz */,
+				6A5CD9C327455212006FAC5F /* box-a.usdz */,
+				6A5CD9C1274550B4006FAC5F /* box-b.usdz */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -161,7 +170,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A6D5049271696630014C75E /* Preview Assets.xcassets in Resources */,
+				6A5CD9C2274550B4006FAC5F /* box-b.usdz in Resources */,
 				6ABC3D0E2717125E00185A68 /* car-beep.mp3 in Resources */,
+				6A5CD9C427455212006FAC5F /* box-a.usdz in Resources */,
 				6A6D5046271696630014C75E /* Assets.xcassets in Resources */,
 				6A6D50542716A2A10014C75E /* toy_biplane.usdz in Resources */,
 				6A6D50512716985B0014C75E /* checker-board.png in Resources */,
@@ -177,6 +188,7 @@
 			files = (
 				6A6D5042271696620014C75E /* ContentView.swift in Sources */,
 				6A6D5040271696620014C75E /* AppDelegate.swift in Sources */,
+				6AA66C35274540E90088A0EB /* shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
