@@ -87,7 +87,7 @@ class SimpleARView: ARView {
     var exampleUSDZModel: ModelEntity!
     
     // Load a geometry modifier function named.
-    let geometryModifier = CustomMaterial.GeometryModifier(named: "myEmptyShader",
+    let geometryModifier = CustomMaterial.GeometryModifier(named: "wrapGeometry",
                                                            in: library)
 
     // Load a surface shader function.
